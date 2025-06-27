@@ -35,6 +35,19 @@ services:
       - "8070:3000"
       - "10022:22"
 
+  home:
+    build:
+      context: ./home
+      dockerfile: Dockerfile
+    volumes:
+      - ./home/public:/usr/share/nginx/html:ro
+    expose:
+      - "8060:80"
+    restart: unless-stopped
+    networks:
+      - proxy
+
+
   nginx-proxy-manager:
     image: jc21/nginx-proxy-manager:latest
     restart: unless-stopped
