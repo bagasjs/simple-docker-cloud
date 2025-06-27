@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./data/filebrowser/srv:/srv
-      - ./data/filebrowser/db:/db
+      - ./data/filebrowser/db:/database
       - ./data/filebrowser/config:/config
     networks:
       - proxy
@@ -15,7 +15,7 @@ services:
     image: neosmemo/memos:stable
     restart: unless-stopped
     volumes:
-      - ./data:/var/opt/memos
+      - ./data/notes:/var/opt/memos
     environment:
       - MEMOS_MODE=prod
       - MEMOS_PORT=80
@@ -23,6 +23,29 @@ services:
       - proxy
     expose:
       - 8090:80
+
+  gogs:
+    image: gogs/gogs
+    restart: unless-stopped
+    volumes:
+      - ./data/gogs:/data
+    networks:
+      - proxy
+    expose:
+      - "8070:3000"
+      - "10022:22"
+
+  home:
+    build:
+      context: ./home
+      dockerfile: Dockerfile
+    volumes:
+      - ./home/public:/usr/share/nginx/html:ro
+    expose:
+      - "8060:80"
+    restart: unless-stopped
+    networks:
+      - proxy
 
   nginx-proxy-manager:
     image: jc21/nginx-proxy-manager:latest
@@ -32,8 +55,8 @@ services:
       - 443:443
       - 81:81
     volumes:
-      - ./npm_data:/data
-      - ./letsencrypt:/etc/letsencrypt
+      - ./data/npm:/data
+      - ./data/letsencrypt:/etc/letsencrypt
     networks:
       - proxy
     
