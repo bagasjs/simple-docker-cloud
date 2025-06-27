@@ -24,6 +24,17 @@ services:
     expose:
       - 8090:80
 
+  gogs:
+    image: gogs/gogs
+    restart: unless-stopped
+    volumes:
+      - ./data/gogs:/data
+    networks:
+      - proxy
+    expose:
+      - "8070:3000"
+      - "10022:22"
+
   nginx-proxy-manager:
     image: jc21/nginx-proxy-manager:latest
     restart: unless-stopped
