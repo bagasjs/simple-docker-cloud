@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./data/filebrowser/srv:/srv
-      - ./data/filebrowser/db:/db
+      - ./data/filebrowser/db:/database
       - ./data/filebrowser/config:/config
     networks:
       - proxy
